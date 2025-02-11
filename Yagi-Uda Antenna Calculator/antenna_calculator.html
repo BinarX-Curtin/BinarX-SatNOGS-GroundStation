@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yagi-Uda Antenna Calculator</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Yagi-Uda Antenna Calculator</h1>
+            <h3>Designed by Rayaan Atif</h3>
+        </header>
+        <div class="content">
+            <div class="form-section">
+                <form id="antennaForm">
+                    <label for="frequency">Frequency (MHz):</label>
+                    <input type="number" id="frequency" name="frequency" placeholder="Enter frequency in MHz" required>
+
+                    <label for="elements">Number of Elements:</label>
+                    <input type="number" id="elements" name="elements" placeholder="Enter number of elements" required>
+
+                    <label for="elementDiameter">Element Diameter (mm):</label>
+                    <input type="number" id="elementDiameter" name="elementDiameter" placeholder="Enter element diameter in mm" required>
+
+                    <label for="boomDiameter">Boom Diameter (mm):</label>
+                    <input type="number" id="boomDiameter" name="boomDiameter" placeholder="Enter boom diameter in mm" required>
+
+                    <input type="hidden" id="boomType" name="boomType" value="round">
+                    <input type="hidden" id="mounting" name="mounting" value="dielectric">
+
+                    <button type="button" onclick="calculateAntenna()">Calculate</button>
+                </form>
+            </div>
+            <div class="result-section" id="result" style="display: none;">
+                <h2>Results</h2>
+                <pre id="output"></pre>
+            </div>
+        </div>
+    </div>
+    <script>
+
+        function calculateAntenna() {
+            const frequency = parseFloat(document.getElementById("frequency").value);
+            const elements = parseInt(document.getElementById("elements").value);
+            const elementDiameter = parseFloat(document.getElementById("elementDiameter").value);
+            const boomDiameter = parseFloat(document.getElementById("boomDiameter").value);
+
+            if (!frequency || !elements || !elementDiameter || !boomDiameter) {
+                alert("Please fill in all fields correctly.");
+                return;
+            }
+
+            const wavelength = 299792.458 / frequency;
+            const reflectorLength = 0.483 * wavelength;
+            const drivenElementLength = 0.448 * wavelength;
+            const directorLengths = [];
+            const k_di_start = 0.416;
+            const k_di_decrement = 0.01;
+
+            for (let i = 0; i < elements - 2; i++) {
+                const k_di = k_di_start - i * k_di_decrement;
+                if (k_di > 0) {
+                    directorLengths.push(k_di * wavelength);
+                }
+            }
+
+            const reflectorPosition = 0;
+            const drivenElementPosition = 0.2 * wavelength;
+            const directorPositions = [];
+            let currentPosition = drivenElementPosition + 0.15 * wavelength;
+
+            for (let i = 0; i < directorLengths.length; i++) {
+                directorPositions.push(currentPosition);
+                currentPosition += 0.3 * wavelength;
+            }
+
+            const elementDistances = [];
+            const allPositions = [reflectorPosition, drivenElementPosition, ...directorPositions];
+            for (let i = 1; i < allPositions.length; i++) {
+                elementDistances.push(allPositions[i] - allPositions[i - 1]);
+            }
+
+            const theoreticalGain = 10 * Math.log10(1.66 * elements);
+
+            const resultDiv = document.getElementById("result");
+            const output = document.getElementById("output");
+            resultDiv.style.display = "block";
+
+            let resultText = `Frequency: ${frequency} MHz\n`;
+            resultText += `Wavelength: ${wavelength.toFixed(2)} mm\n\n`;
+            resultText += `Reflector Length: ${reflectorLength.toFixed(2)} mm\n`;
+            resultText += `Driven Element Length: ${drivenElementLength.toFixed(2)} mm\n`;
+
+            for (let i = 0; i < directorLengths.length; i++) {
+                resultText += `Director ${i + 1} Length: ${directorLengths[i].toFixed(2)} mm\n`;
+            }
+
+            resultText += `\nReflector Position: ${reflectorPosition.toFixed(2)} mm\n`;
+            resultText += `Driven Element Position: ${drivenElementPosition.toFixed(2)} mm\n`;
+
+            for (let i = 0; i < directorPositions.length; i++) {
+                resultText += `Director ${i + 1} Position: ${directorPositions[i].toFixed(2)} mm\n`;
+            }
+
+            resultText += `\nDistances Between Elements:\n`;
+            for (let i = 0; i < elementDistances.length; i++) {
+                resultText += `Distance ${i + 1}-${i + 2}: ${elementDistances[i].toFixed(2)} mm\n`;
+            }
+
+            resultText += `\nPredicted Gain: ${theoreticalGain.toFixed(2)} dBi\n`;
+
+            output.textContent = resultText;
+        }
+    </script>
+</body>
+</html>

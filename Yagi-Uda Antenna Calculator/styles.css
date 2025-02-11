@@ -1,0 +1,122 @@
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: rgb(8,11,29);
+    color: #ffffff;
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: rgb(10,13,35);
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+header h1 {
+    font-size: 2.5rem;
+    text-align: center;
+    margin-bottom: 10px;
+    font-family: "Ailerons", Calibri, Tahoma, sans-serif;
+}
+
+header h3 {
+    font-size: 1.2rem;
+    text-align: center;
+    color: #a9bcd0;
+    margin-bottom: 30px;
+    font-family: "Stellar", Calibri, Tahoma, sans-serif;
+}
+
+.content {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.form-section, .result-section {
+    flex: 1;
+    min-width: 300px;
+    padding: 20px;
+    background-color: rgb(0,0,52);
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+form label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+form input {
+    width: calc(100% - 20px); 
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 25px;
+    background-color: #e0e1dd;
+    color: #000;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+form input:focus {
+    border-color: #007BFF;
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    background-color: transparent; /* Transparent background initially */
+    color: rgb(214,97,57); /* Text color matches the outline */
+    border: 2px solid rgb(214,97,57); /* Outline color */
+    border-radius: 25px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease; /* Smooth transition for hover effect */
+}
+
+button:hover {
+    background-color: rgb(214,97,57); /* Fill background on hover */
+    color: #fff; /* Change text color to white for contrast */
+    transform: scale(1.05); /* Slightly enlarge the button */
+}
+
+.result-section {
+    color: #ffffff;
+}
+
+.result-section h2 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+}
+
+.result-section pre {
+    background-color: #e0e1dd;
+    color: #000;
+    padding: 10px;
+    border-radius: 10px;
+    overflow-x: auto;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.result-section {
+    animation: fadeIn 0.5s ease-in-out;
+}
